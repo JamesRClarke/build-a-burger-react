@@ -17,9 +17,6 @@ const INGREDIENT_PRICES = {
 }
 
 class BurgerBuilder extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
   state = {
     ingredients: null,
     totalPrice: 4,
@@ -30,6 +27,7 @@ class BurgerBuilder extends Component {
   }
 
   componentDidMount () {
+    console.log(this.props);
     axios.get('https://burger-builder-react-a9dcd.firebaseio.com/ingredients.json')
     .then(response => {
       this.setState({
@@ -112,38 +110,47 @@ purchaseCancelHandler = () => {
 
 purchaseContinueHandler = () => {
   // alert('Continue!!')
-  this.setState({
-    loading: true
-  })
-  const order = {
-    ingredients: this.state.ingredients,
-    price: this.state.totalPrice,
-    customer: {
-      name: 'james',
-      address: {
-        street: 'test street',
-        postCode: 'CR2 9NG',
-        country: 'James'
-      },
-      email: 'james@email.com'
-    },
-    delivery: 'fast'
-  }
-
-  axios.post('/orders.json', order)
-  .then(response => {
-    this.setState({
-      loading: false,
-      purchasing: false
-    })
-    console.log(response);
-  })
-  .catch(error => {
-    this.setState({
-      loading: false,
-      purchasing: false
-    })
-    console.log(error);
+  // this.setState({
+  //   loading: true
+  // })
+  // const order = {
+  //   ingredients: this.state.ingredients,
+  //   price: this.state.totalPrice,
+  //   customer: {
+  //     name: 'james',
+  //     address: {
+  //       street: 'test street',
+  //       postCode: 'CR2 9NG',
+  //       country: 'James'
+  //     },
+  //     email: 'james@email.com'
+  //   },
+  //   delivery: 'fast'
+  // }
+  //
+  // axios.post('/orders.json', order)
+  // .then(response => {
+  //   this.setState({
+  //     loading: false,
+  //     purchasing: false
+  //   })
+  //   console.log(response);
+  // })
+  // .catch(error => {
+  //   this.setState({
+  //     loading: false,
+  //     purchasing: false
+  //   })
+  //   console.log(error);
+  // })
+const queryParams = [];
+for (let i in this.state.ingredients) {
+  queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]))
+}
+const queryString  = queryParams.join('&');
+  this.props.history.push({
+    pathname: '/checkout',
+    search: '?' + queryString
   })
 }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom'
 
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
@@ -7,7 +8,7 @@ import classes from './Burger.css'
 
 
 const burger = (props) => {
-
+  console.log(props);
   let transformedIngredients = Object.keys(props.ingredients)
   .map( igKey => {
     return [...Array(props.ingredients[igKey])].map( ( _ , index)=> {
@@ -17,7 +18,7 @@ const burger = (props) => {
   .reduce( (arr, el) => {
     return arr.concat(el)
   }, [] );
- 
+
 if (transformedIngredients.length === 0) {
   transformedIngredients = <p>Please add ingredients to start building your burger.</p>
 }
@@ -32,4 +33,4 @@ if (transformedIngredients.length === 0) {
   );
 };
 
-export default burger;
+export default withRouter(burger);
