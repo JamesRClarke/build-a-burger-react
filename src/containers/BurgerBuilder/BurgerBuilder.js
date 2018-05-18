@@ -109,45 +109,14 @@ purchaseCancelHandler = () => {
 }
 
 purchaseContinueHandler = () => {
-  // alert('Continue!!')
-  // this.setState({
-  //   loading: true
-  // })
-  // const order = {
-  //   ingredients: this.state.ingredients,
-  //   price: this.state.totalPrice,
-  //   customer: {
-  //     name: 'james',
-  //     address: {
-  //       street: 'test street',
-  //       postCode: 'CR2 9NG',
-  //       country: 'James'
-  //     },
-  //     email: 'james@email.com'
-  //   },
-  //   delivery: 'fast'
-  // }
-  //
-  // axios.post('/orders.json', order)
-  // .then(response => {
-  //   this.setState({
-  //     loading: false,
-  //     purchasing: false
-  //   })
-  //   console.log(response);
-  // })
-  // .catch(error => {
-  //   this.setState({
-  //     loading: false,
-  //     purchasing: false
-  //   })
-  //   console.log(error);
-  // })
-const queryParams = [];
-for (let i in this.state.ingredients) {
-  queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]))
-}
-const queryString  = queryParams.join('&');
+
+  const queryParams = [];
+  for (let i in this.state.ingredients) {
+    queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]))
+  }
+  queryParams.push('price=' + this.state.totalPrice);
+
+  const queryString  = queryParams.join('&');
   this.props.history.push({
     pathname: '/checkout',
     search: '?' + queryString
@@ -169,46 +138,46 @@ render () {
 
 
 
-  if(this.state.ingredients) {
-    burger = (
-      <Aux>
-        <Burger ingredients={this.state.ingredients}/>
-        <BuildControls
-          purchaseable={this.state.purchaseable}
-          ordered={this.purchaseHandler}
-          price={this.state.totalPrice}
-          disabled={disabledInfo}
-          ingredientAdded={this.addIngredientHandler}
-          ingredientRemoved={this.removeIngredientHandler}
-          />
-      </Aux>
-    );
-    orderSummary = (
-      <OrderSummary
+if(this.state.ingredients) {
+  burger = (
+    <Aux>
+      <Burger ingredients={this.state.ingredients}/>
+      <BuildControls
+        purchaseable={this.state.purchaseable}
+        ordered={this.purchaseHandler}
         price={this.state.totalPrice}
-        ingredients={this.state.ingredients}
-        purchasedCancel={this.purchaseCancelHandler}
-        purchasedContinue={this.purchaseContinueHandler}
-        / >
-      )
-    }
-
-    if (this.state.loading) {
-      orderSummary = <Spinner message="Sending order..."/>
-    }
-
-
-
-    return (
-      <Aux>
-        <Modal modalClosed={this.purchaseCancelHandler} show={this.state.purchasing}>
-          {orderSummary}
-        </Modal>
-        {burger}
-      </Aux>
-
-    );
+        disabled={disabledInfo}
+        ingredientAdded={this.addIngredientHandler}
+        ingredientRemoved={this.removeIngredientHandler}
+        />
+    </Aux>
+  );
+  orderSummary = (
+    <OrderSummary
+      price={this.state.totalPrice}
+      ingredients={this.state.ingredients}
+      purchasedCancel={this.purchaseCancelHandler}
+      purchasedContinue={this.purchaseContinueHandler}
+      / >
+    )
   }
+
+  if (this.state.loading) {
+    orderSummary = <Spinner message="Sending order..."/>
+  }
+
+
+
+  return (
+    <Aux>
+      <Modal modalClosed={this.purchaseCancelHandler} show={this.state.purchasing}>
+        {orderSummary}
+      </Modal>
+      {burger}
+    </Aux>
+
+  );
+}
 
 }
 
